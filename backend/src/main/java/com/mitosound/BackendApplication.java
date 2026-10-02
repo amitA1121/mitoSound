@@ -1,4 +1,4 @@
-package mitoSound_backend;
+package com.mitosound;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
