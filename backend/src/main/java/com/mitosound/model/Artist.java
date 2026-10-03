@@ -18,7 +18,7 @@ public class Artist {
 
     public String description;
 
-
+    public int age;
 
     protected Artist() {
     }
