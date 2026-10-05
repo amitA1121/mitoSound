@@ -2,23 +2,20 @@ package com.mitosound.model;
 
 import java.util.UUID;
 
-import org.hibernate.annotations.Generated;
 import jakarta.persistence.*;
 
-@Entity 
+@Entity
 @Table(name = "artists")
 public class Artist {
-    
-    @Id 
-    @Generated 
-    public UUID id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
 
     @Column(nullable = false, length = 50)
-    public String name;
+    private String name;
 
-    public String description;
-
-
+    private String description;
 
     protected Artist() {
     }
@@ -32,11 +29,11 @@ public class Artist {
         return id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public String description() {
+    public String getDescription() {
         return description;
     }
 }

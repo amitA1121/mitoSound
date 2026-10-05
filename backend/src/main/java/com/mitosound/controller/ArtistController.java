@@ -2,16 +2,17 @@ package com.mitosound.controller;
 
 import java.util.List;
 
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.mitosound.dto.CreateArtitstRequest;
 import com.mitosound.model.Artist;
 import com.mitosound.service.ArtistService;
 
-@RestController 
+@RestController
 @RequestMapping("/api/artists")
 public class ArtistController {
-    
+
     private final ArtistService artistService;
 
     public ArtistController(ArtistService artistService) {
@@ -23,12 +24,28 @@ public class ArtistController {
         return artistService.getAllArtists();
     }
 
-    @PostMapping 
-    public Artist createArtist(@RequestBody CreateArtitstRequest request) {
-        return artistService.createArtist(
-            request.name(),
-            request.description()
-        );
+    @GetMapping(params = "name")
+    public ResponseEntity<?> getArtistByName(@RequestParam String name) {
+        return artistService.getArtistByName(name)
+            .<ResponseEntity<?>>map(ResponseEntity::ok)
+            .orElseGet(() -> artistNotFound(name));
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Artist createArtist(@RequestBody CreateArtitstRequest request) {
+        return artistService.createArtist(request.name(), request.description());
+    }
+
+    @DeleteMapping(params = "name")
+    public ResponseEntity<String> deleteArtistByName(@RequestParam String name) {
+        return artistService.deleteArtistByName(name)
+            ? ResponseEntity.ok("Artist '" + name + "' deleted")
+            : artistNotFound(name);
+    }
+
+    private ResponseEntity<String> artistNotFound(String name) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Artist '" + name + "' not found");
+    }
 }
