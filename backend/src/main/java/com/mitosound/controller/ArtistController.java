@@ -19,6 +19,7 @@ public class ArtistController {
         this.artistService = artistService;
     }
 
+    //get
     @GetMapping
     public List<Artist> getAllArtists() {
         return artistService.getAllArtists();
@@ -31,17 +32,27 @@ public class ArtistController {
             .orElseGet(() -> artistNotFound(name));
     }
 
+    //create
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Artist createArtist(@RequestBody CreateArtitstRequest request) {
         return artistService.createArtist(request.name(), request.description());
     }
 
+    //remove
     @DeleteMapping(params = "name")
     public ResponseEntity<String> deleteArtistByName(@RequestParam String name) {
         return artistService.deleteArtistByName(name)
             ? ResponseEntity.ok("Artist '" + name + "' deleted")
             : artistNotFound(name);
+    }
+
+    //update
+    @PutMapping(params = "name")
+    public ResponseEntity<?> updateArtist(@RequestParam String name, @RequestBody CreateArtitstRequest request) {
+        return artistService.updateArtist(name, request.name(), request.description())
+            .<ResponseEntity<?>>map(ResponseEntity::ok)
+            .orElseGet(() -> artistNotFound(name));
     }
 
     private ResponseEntity<String> artistNotFound(String name) {
