@@ -31,7 +31,7 @@ public class ArtistService {
 
     public boolean deleteArtistByName(String name) {
         Optional<Artist> artist = artistRepository.findFirstByName(name);
-        artist.ifPresent(artistRepository::delete);
+        artist.ifPresent(foundArtist -> artistRepository.delete(foundArtist));
         return artist.isPresent();
     }
 }
