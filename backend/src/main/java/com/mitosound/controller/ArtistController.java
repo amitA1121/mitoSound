@@ -35,8 +35,8 @@ public class ArtistController {
     //create
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Artist createArtist(@RequestBody CreateArtitstRequest request) {
-        return artistService.createArtist(request.name(), request.description());
+    public Artist createArtist(@RequestBody CreateArtitstRequest artist) {
+        return artistService.createArtist(artist.name(), artist.description());
     }
 
     //remove
