@@ -34,9 +34,10 @@ public class ArtistController {
 
     //create
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Artist createArtist(@RequestBody CreateArtitstRequest artist) {
-        return artistService.createArtist(artist.name(), artist.description());
+    public ResponseEntity<?> createArtist(@RequestBody CreateArtitstRequest artist) {
+        return artistService.createArtist(artist.name(), artist.description())
+            .<ResponseEntity<?>>map(created -> ResponseEntity.status(HttpStatus.CREATED).body(created))
+            .orElseGet(() -> artistAlreadyExists(artist.name()));
     }
 
     //remove
@@ -58,5 +59,10 @@ public class ArtistController {
     private ResponseEntity<String> artistNotFound(String name) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body("Artist '" + name + "' not found");
+    }
+
+    private ResponseEntity<String> artistAlreadyExists(String name) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body("Artist '" + name + "' already exists");
     }
 }

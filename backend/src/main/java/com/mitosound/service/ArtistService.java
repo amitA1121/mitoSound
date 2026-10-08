@@ -25,8 +25,11 @@ public class ArtistService {
         return artistRepository.findFirstByName(name);
     }
 
-    public Artist createArtist(String name, String description) {
-        return artistRepository.save(new Artist(name, description));
+    public Optional<Artist> createArtist(String name, String description) {
+        if (artistRepository.artistExistsByName(name)) {
+            return Optional.empty();
+        }
+        return Optional.of(artistRepository.save(new Artist(name, description)));
     }
 
     public boolean deleteArtistByName(String name) {

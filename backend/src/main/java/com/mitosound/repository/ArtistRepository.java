@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface ArtistRepository extends JpaRepository<Artist, UUID> {
     Optional<Artist> findFirstByName(String name);
+    boolean artistExistsByName(String name);
 }
